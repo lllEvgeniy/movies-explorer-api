@@ -66,12 +66,7 @@ const login = (req, res, next) => {
             throw new NoExist(ERROR_MESSAGE.ERROR_LOGIN_OR_PASS);
           }
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-          res.cookie('jwt', token, {
-            maxAge: 3600000 * 12 * 7,
-            httpOnly: true,
-            sameSite: true,
-          })
-            .send({ token });
+          res.send({ token });
         });
     })
     .catch(next);
