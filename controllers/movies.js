@@ -10,7 +10,7 @@ const {
 const getMovie = (req, res, next) => {
   const owner = req.user._id;
   Movie.find({ owner })
-    .then((cards) => res.send(cards))
+    .then((movies) => res.send(movies))
     .catch((err) => {
       next(err);
     });
@@ -39,27 +39,27 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.send(movie))
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequest(ERROR_MESSAGE.CREATE_CARDS_ERROR));
+        return next(new BadRequest(ERROR_MESSAGE.CREATE_MOVIES_ERROR));
       }
       return next(err);
     });
 };
 
 const deleteMovieById = (req, res, next) => {
-  Movie.findById(req.params.cardId)
-    .then((card) => {
-      if (!card) {
-        throw new NotFoundError(ERROR_MESSAGE.NOT_FOUND_CARDSID);
+  Movie.findById(req.params.movieId)
+    .then((movie) => {
+      if (!movie) {
+        throw new NotFoundError(ERROR_MESSAGE.NOT_FOUND_MOVIESID);
       }
-      if (card.owner.toString() !== req.user._id) {
+      if (movie.owner.toString() !== req.user._id) {
         throw new ImpossibleDelete(ERROR_MESSAGE.IMPOSSIBLE_TO_DEL);
       }
-      return Movie.findByIdAndRemove(req.params.cardId)
-        .then((removeCard) => res.send(removeCard));
+      return Movie.findByIdAndRemove(req.params.movieId)
+        .then((removeMovie) => res.send(removeMovie));
     })
     .catch((err) => {
       if (err instanceof mongoose.Error.CastError) {
-        return next(new BadRequest(ERROR_MESSAGE.INCORRECT_CARDSID));
+        return next(new BadRequest(ERROR_MESSAGE.INCORRECT_MOVIESID));
       }
       return next(err);
     });

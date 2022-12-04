@@ -43,6 +43,9 @@ const updateUser = (req, res, next) => {
   ).orFail(new NotFoundError('NotFound'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
+      if (err.code === 11000) {
+        return next(new ExistEmail(ERROR_MESSAGE.EXIST_EMAIL));
+      }
       if (err instanceof mongoose.Error.ValidationError) {
         return next(new BadRequest(ERROR_MESSAGE.PATCH_BAD_REQUEST));
       }
