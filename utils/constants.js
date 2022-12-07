@@ -14,9 +14,12 @@ const ERROR_MESSAGE = {
   EXIST_EMAIL: 'Данный email уже зарегистрирован',
   IMPOSSIBLE_TO_DEL: 'Невозможно удалить',
   AUTHORIZATION_ERROR: 'Необходима авторизация',
+  TOKEN_NOT_FOUND: 'Токен не найден',
 };
 
 const MongoUrlDev = 'mongodb://localhost:27017/moviesdb';
+
+const jwtDel = 'Токен удалён';
 
 const regExp = /^https?:\/\/(www\.)?[a-zA-Z\d-]+\.[\w\d\-.~:/?#[\]@!$&'()*+,;=]{2,}#?$/;
 
@@ -28,4 +31,5 @@ module.exports = {
   AUTHORIZATION_ERROR,
   regExp,
   MongoUrlDev,
+  jwtDel,
 };

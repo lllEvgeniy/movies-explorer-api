@@ -28,6 +28,6 @@ app.use(routes);
 app.use(errorLogger);
 app.use(errors());
 app.use(CentralizedErrorHandler);
-app.listen(PORT, () => {
+app.listen(NODE_ENV === 'production' ? PORT : 3000, () => {
   console.log(`App listening on port ${NODE_ENV === 'production' ? PORT : 3000}`);
 });

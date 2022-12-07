@@ -11,6 +11,7 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const {
   ERROR_MESSAGE,
+  jwtDel,
 } = require('../utils/constants');
 
 const currentUser = (req, res, next) => {
@@ -69,10 +70,23 @@ const login = (req, res, next) => {
             throw new NoExist(ERROR_MESSAGE.ERROR_LOGIN_OR_PASS);
           }
           const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+          res.cookie('jwt', token, {
+            maxAge: 3600000 * 12 * 7,
+            httpOnly: true,
+            sameSite: true,
+          });
           res.send({ token });
         });
     })
     .catch(next);
+};
+
+const logout = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    await res.clearCookie('jwt');
+    return res.send({ message: jwtDel });
+  }
+  return next(new NotFoundError(ERROR_MESSAGE.TOKEN_NOT_FOUND));
 };
 
 const createUser = (req, res, next) => {
@@ -106,4 +120,5 @@ module.exports = {
   updateUser,
   createUser,
   currentUser,
+  logout,
 };
